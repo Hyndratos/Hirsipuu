@@ -13,33 +13,54 @@ class Peli:
         sanat = []
         with open(polku, "r") as tiedosto:
             for sana in tiedosto:
+                sana = sana.strip()
+
                 if sana in sanat:
                     continue
+
                 sanat.append(sana)
+
         self.valitse_sana(sanat)
 
 
     def valitse_sana(self, sanat: list[str]):
         """ Valitsee Sanat listasta satunnaisen sanan. """
         self.Sana = choice(sanat)
-        self.ArvausSana = "_" * (len(self.Sana) - 1)
+        self.ArvausSana = "_" * len(self.Sana)
 
     def aloitus(self):
         """ Aloitaa pelin loopin """
 
         self.lue_sanat_tiedosto(self.SanatPolku)
         print(self.Sana)
-
+        print("Kirjoita Lopeta jos haluat lopettaa")
         while True:
             self.piirra_arvaus()
 
-            kirjain = str(input("Arvaa kirjain: "))
-            if kirjain == "":
+            try:
+                kirjain = str(input("Arvaa kirjain: "))
+            except KeyboardInterrupt:
+                print("\nLopetit pelin.")
                 break
 
-            if not self.tarkista_kirjain(kirjain):
+            if kirjain.lower() == "lopeta":
+                print("\nLopetit pelin.")
+                break
+
+            oliKirjain, kirjainLaitettu = self.tarkista_kirjain(kirjain)
+
+            if self.sana_tarkistus():
+                print("Arvasit koko sanan")
+                break
+
+            if not kirjainLaitettu:
+                print("Olet jo antanut tämän kirjaimen.")
+                continue
+            
+            if not oliKirjain:
                 havio = self.vahenna_aravuas_maaraa()
                 if havio: break
+
 
             
 
@@ -50,18 +71,25 @@ class Peli:
         print(f"Arvaus Määrä: {self.ArvausMaara}")
         print(" ".join(self.ArvausSana))
 
-    def tarkista_kirjain(self, arvausKirjain: str) -> bool:
+    def tarkista_kirjain(self, arvausKirjain: str) -> tuple[bool, bool]:
         """ Tarkistaa onko kirjain sanassa jos on niin palautaa True """
-        tulos = False
+        oliKirjain = False
+        kirjainLaitettu = True
 
         for i, kirjain in enumerate(self.Sana):
             if kirjain == arvausKirjain:
-                self.lisaa_kirjain(i, kirjain)
-                tulos = True
+                kirjainLaitettu = self.lisaa_kirjain(i, kirjain)
+                oliKirjain = True
         
-        return tulos
+        return (oliKirjain, kirjainLaitettu)
 
-    def vahenna_aravuas_maaraa(self):
+    def sana_tarkistus(self) -> bool:
+        """ Tarkistaa onko arvattu sana sama kuin sana ja palautaa True jos on valmis """
+        if self.Sana.lower() == self.ArvausSana.lower():
+            return True
+        return False
+
+    def vahenna_aravuas_maaraa(self) -> bool:
         """ Vähentää Arvaus määrää ja jos se menee 0 niin palauttaa True """
 
         self.ArvausMaara -= 1
