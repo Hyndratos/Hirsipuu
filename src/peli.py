@@ -1,23 +1,13 @@
 from random import choice
 from colors import Color
 import os
+import subprocess
 
 #######
 #     |
 #     O
 #    /|\
 #    / \
-
-# x o x o x o x o x o x
-# o x o x o x o x o x o
-# x o x o x o x o x o x
-# o x o x o x o x o x o
-# x o x o x o x o x o x
-# o x o x o x o x o x o
-# x o x o x o x o x o x
-# o x o x o x o x o x o
-# x o x o x o x o x o x
-# o x o x o x o x o x o
 
 class Peli:
     """ Hoitaa kaiken pelin logiikan. """
@@ -53,7 +43,7 @@ class Peli:
         self.valitse_sana(sanat)
 
     def cls(self):
-        os.system('cls' if os.name=='nt' else 'clear')
+        subprocess.run(["clear"], shell=True)
 
 
     def valitse_sana(self, sanat: list[str]):
@@ -70,9 +60,10 @@ class Peli:
             print(self.Sana)
             print("Kirjoita Lopeta jos haluat lopettaa tai paina ctrl + c")
             print()
-            self.piirra_tikkiukko()
 
+            self.piirra_tikkiukko()
             self.piirra_arvaus()
+
             try:
                 kirjain = str(input("Arvaa kirjain: "))
             except KeyboardInterrupt:
