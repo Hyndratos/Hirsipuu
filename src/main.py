@@ -2,7 +2,6 @@ import subprocess
 from peli import Peli
 from colors import Color
 
-
 class Sovellus:
     """ Ohjelman pää objecti joka joka hoitaa pelin luonnin """
     def __init__(self):
@@ -18,14 +17,15 @@ class Sovellus:
     def alotusruutu(self):
         while True:
             
-            if self.Peli == None:
+            if self.Peli == None or self.Peli.Break:
                 self.cls()
-            self.piirrä_alotusruutu()
-
+                self.piirrä_alotusruutu()
+            
             try:
                 komento = int(input("Valitse komento: "))
             except ValueError:
-                #print("Anna numero.\n")
+                self.Peli = None
+                print("Anna numero.\n")
                 self.cls()
                 continue
             except KeyboardInterrupt:
@@ -41,16 +41,20 @@ class Sovellus:
 
     def piirrä_alotusruutu(self):
         print(Color.ENDC, end="")
-        print("----------------------------------------------------------------")
         print(f"""{Color.OKBLUE}
-    ██╗  ██╗██╗██████╗ ███████╗██╗██████╗ ██╗   ██╗██╗   ██╗
-    ██║  ██║██║██╔══██╗██╔════╝██║██╔══██╗██║   ██║██║   ██║
-    ███████║██║██████╔╝███████╗██║██████╔╝██║   ██║██║   ██║
-    ██╔══██║██║██╔══██╗╚════██║██║██╔═══╝ ██║   ██║██║   ██║
-    ██║  ██║██║██║  ██║███████║██║██║     ╚██████╔╝╚██████╔╝
-    ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝╚═╝      ╚═════╝  ╚═════╝ 
+████████████████████████████████████████████████████████████████████
+██                                                                ██
+██                                                                ██
+██    ██╗  ██╗██╗██████╗ ███████╗██╗██████╗ ██╗   ██╗██╗   ██╗    ██
+██    ██║  ██║██║██╔══██╗██╔════╝██║██╔══██╗██║   ██║██║   ██║    ██
+██    ███████║██║██████╔╝███████╗██║██████╔╝██║   ██║██║   ██║    ██
+██    ██╔══██║██║██╔══██╗╚════██║██║██╔═══╝ ██║   ██║██║   ██║    ██
+██    ██║  ██║██║██║  ██║███████║██║██║     ╚██████╔╝╚██████╔╝    ██
+██    ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝╚═╝      ╚═════╝  ╚═════╝     ██
+██                                                                ██
+██                                                                ██
+████████████████████████████████████████████████████████████████████
         {Color.ENDC}""")
-        print("----------------------------------------------------------------")
         print(f"1: {Color.OKGREEN}Alota Uusi Peli")
         print(Color.ENDC, end="")
         print(f"2: {Color.FAIL}  Lopeta Peli")
