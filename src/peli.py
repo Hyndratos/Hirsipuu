@@ -9,16 +9,18 @@ import subprocess
 #    /|\
 #    / \
 
+debug = False
+
 class Peli:
     """ Hoitaa kaiken pelin logiikan. """
     TikkuUkot = [
-        ["+-----+", "|     |", "|", "|", "|"],
-        ["+-----+", "|     |", "|     O", "|", "|"],
-        ["+-----+", "|     |", "|     O", "|     |", "|"],
-        ["+-----+", "|     |", "|     O", "|     |", "|      \\"],
-        ["+-----+", "|     |", "|     O", "|     |", "|    / \\"],
-        ["+-----+", "|     |", "|     O", "|     |\\", "|    / \\"],
-        ["+-----+", "|     |", "|     O", "|    /|\\", "|    / \\"]
+        [" +-----+", " |     |", " |", " |", " |", "==="],
+        [" +-----+", " |     |", " |     O", " |", " |", "==="],
+        [" +-----+", " |     |", " |     O", " |     |", " |", "==="],
+        [" +-----+", " |     |", " |     O", " |     |", " |      \\", "==="],
+        [" +-----+", " |     |", " |     O", " |     |", " |    / \\", "==="],
+        [" +-----+", " |     |", " |     O", " |     |\\", " |    / \\", "==="],
+        [" +-----+", " |     |", " |     O", " |    /|\\", " |    / \\", "==="]
     ]
 
     def __init__(self, sanatPolku: str, arvausMaara: int):
@@ -27,6 +29,7 @@ class Peli:
         self.ArvausMaara = arvausMaara
         self.IsoinArvausMäärä = arvausMaara
         self.SanatPolku = sanatPolku
+        self.AnnetutKirjaimet = ""
 
     def lue_sanat_tiedosto(self, polku: str):
         """ Lukee annetun polun tiedoston sanat ja lisää ne listaan. Jonka jälkeen se suoritaa valitse sana"""
@@ -57,7 +60,17 @@ class Peli:
         self.lue_sanat_tiedosto(self.SanatPolku)
         while True:
             self.cls()
-            print(self.Sana)
+            print("----------------------------------------------------------------")
+            print(f"""{Color.OKBLUE}
+    ██╗  ██╗██╗██████╗ ███████╗██╗██████╗ ██╗   ██╗██╗   ██╗
+    ██║  ██║██║██╔══██╗██╔════╝██║██╔══██╗██║   ██║██║   ██║
+    ███████║██║██████╔╝███████╗██║██████╔╝██║   ██║██║   ██║
+    ██╔══██║██║██╔══██╗╚════██║██║██╔═══╝ ██║   ██║██║   ██║
+    ██║  ██║██║██║  ██║███████║██║██║     ╚██████╔╝╚██████╔╝
+    ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝╚═╝      ╚═════╝  ╚═════╝ 
+            {Color.ENDC}""")
+            print("----------------------------------------------------------------")
+            if debug: print(self.Sana)
             print("Kirjoita Lopeta jos haluat lopettaa tai paina ctrl + c")
             print()
 
@@ -70,21 +83,34 @@ class Peli:
                 self.cls()
                 break
 
+
             if kirjain.lower() == "lopeta":
                 self.cls()
                 break
-
+            
+            kirjain = kirjain.replace(" ", "")
+            if kirjain == "":
+                continue
+            
             if len(kirjain) > 1:
-                for k in kirjain:
+
+                kirjaimet = [k for k in kirjain if k not in self.AnnetutKirjaimet]
+
+                for k in kirjaimet:
                     oliKirjain, kirjainLaitettu = self.tarkista_kirjain(k)
 
                     if not kirjainLaitettu:
                         continue
 
                     if self.vahennus_tarkistus(oliKirjain):
+                        loopiBreak = True
                         break
+                    
             else:
 
+                if any([k for k in kirjain if k in self.AnnetutKirjaimet]):
+                    continue
+                
                 oliKirjain, kirjainLaitettu = self.tarkista_kirjain(kirjain)
 
                 if not kirjainLaitettu:
@@ -92,6 +118,7 @@ class Peli:
                     continue
                 
                 if self.vahennus_tarkistus(oliKirjain):
+                    print("Hävisit Pelin!")
                     break
                 
             if self.sana_tarkistus():
@@ -106,15 +133,35 @@ class Peli:
                 break
 
             if loopiBreak:
-                self.cls()
+                #print(f"{Color.FAIL}Hävisit Pelin!{Color.ENDC}")
+                print(f"""{Color.FAIL}
+          █ █     
+          
+██╗  ██╗ █████╗ ██╗   ██╗██╗███████╗██╗████████╗    ██████╗ ███████╗██╗     ██╗███╗   ██╗
+██║  ██║██╔══██╗██║   ██║██║██╔════╝██║╚══██╔══╝    ██╔══██╗██╔════╝██║     ██║████╗  ██║
+███████║███████║██║   ██║██║███████╗██║   ██║       ██████╔╝█████╗  ██║     ██║██╔██╗ ██║
+██╔══██║██╔══██║╚██╗ ██╔╝██║╚════██║██║   ██║       ██╔═══╝ ██╔══╝  ██║     ██║██║╚██╗██║
+██║  ██║██║  ██║ ╚████╔╝ ██║███████║██║   ██║       ██║     ███████╗███████╗██║██║ ╚████║
+╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚══════╝╚═╝   ╚═╝       ╚═╝     ╚══════╝╚══════╝╚═╝╚═╝  ╚═══╝
+                                                                                         
+                {Color.ENDC}""")
                 break
 
 
     def piirra_arvaus(self):
         print(Color.OKCYAN)
         print(f"Arvaus Määrä: {self.ArvausMaara}")
-        print(Color.ENDC, end="")
+        print(Color.ENDC)
+        self.piirra_testatut_kirjaimet()
+        print()
+        #print("Testatut Kirjaimet: " + f"{Color.FAIL if },".join(self.AnnetutKirjaimet))
         print(" ".join(self.ArvausSana))
+
+    def piirra_testatut_kirjaimet(self):
+        print("Testatut Kirjaimet: ", end="")
+        for i, k in enumerate(self.AnnetutKirjaimet):
+            color = Color.OKGREEN if k in self.Sana else Color.FAIL
+            print(f"{"," if i > 0 else ""}{color}{k}{Color.ENDC}", end="")
 
     def piirra_tikkiukko(self):
         for rivi in self.TikkuUkot[self.IsoinArvausMäärä - self.ArvausMaara]:
@@ -132,6 +179,9 @@ class Peli:
                 kirjainLaitettu = self.lisaa_kirjain(i, kirjain)
                 oliKirjain = True
         
+        if arvausKirjain not in self.AnnetutKirjaimet:
+            self.AnnetutKirjaimet += arvausKirjain.lower()
+        
         return (oliKirjain, kirjainLaitettu)
 
     def sana_tarkistus(self) -> bool:
@@ -145,7 +195,7 @@ class Peli:
             havio = self.vahenna_aravuas_maaraa()
             if havio:
                 self.cls()
-                self.piirra_tikkiukko()
+                #self.piirra_tikkiukko()
                 print(f"{Color.OKGREEN}Sana oli: {self.Sana}")
                 return True
         return False
@@ -167,3 +217,6 @@ class Peli:
 
         self.ArvausSana = sana[:index] + kirjain + sana[index + 1:]
         return True
+
+if __name__ == "__main__":
+    print("Ei tee mitään")
