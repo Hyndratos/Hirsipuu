@@ -184,7 +184,7 @@ class Peli:
         for i, k in enumerate(self.AnnetutKirjaimet):
             color = Color.OKGREEN if k in self.Sana else Color.FAIL
 
-            print(f"{"," if i > 0 else ""}{color}{k}{Color.ENDC}", end="")
+            print(f"{"|" if i > 0 else ""}{color}{k}{Color.ENDC}", end="")
 
     def piirra_tikkiukko(self):
         for rivi in self.TikkuUkot[self.IsoinArvausMäärä - self.ArvausMaara]:
