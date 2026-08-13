@@ -3,6 +3,7 @@ from peli import Peli
 import ascii as ac
 from colors import Color
 import os
+import sys
 
 class Sovellus:
     """ Ohjelman pää objecti joka joka hoitaa pelin luonnin """
@@ -114,7 +115,7 @@ class Sovellus:
         return tiedostot
 
     def cls(self):
-        subprocess.run(["clear"], shell=True)
+        subprocess.run(["clear" if sys.platform == "linux" else "cls"], shell=True)
 
 
 def main():

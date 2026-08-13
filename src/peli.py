@@ -1,8 +1,8 @@
 from random import choice
 from colors import Color
-import os
 import subprocess
 import ascii as ac
+import sys
 
 #######
 #     |
@@ -10,7 +10,7 @@ import ascii as ac
 #    /|\
 #    / \
 
-debug = True
+debug = False
 
 class Peli:
     """ Hoitaa kaiken pelin logiikan. """
@@ -36,7 +36,7 @@ class Peli:
     def lue_sanat_tiedosto(self, polku: str):
         """ Lukee annetun polun tiedoston sanat ja lisää ne listaan. Jonka jälkeen se suoritaa valitse sana"""
         sanat = []
-        with open(polku, "r") as tiedosto:
+        with open(polku, "r", encoding="utf-8") as tiedosto:
             for sana in tiedosto:
                 sana = sana.strip()
 
@@ -48,7 +48,7 @@ class Peli:
         self.valitse_sana(sanat)
 
     def cls(self):
-        subprocess.run(["clear"], shell=True)
+        subprocess.run(["clear" if sys.platform == "linux" else "cls"], shell=True)
 
 
     def valitse_sana(self, sanat: list[str]):
