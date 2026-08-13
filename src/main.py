@@ -25,11 +25,17 @@ class Sovellus:
             if self.Peli == None or self.Peli.Break:
                 self.cls()
                 self.piirrä_alotusruutu()
+
+            if self.Peli != None:
+                input("Paina Enter Jatkaaksesi")
+                self.Peli = None
+                self.cls()
+                continue
             
             try:
                 komento = int(input("Valitse komento: "))
             except ValueError:
-                self.Peli = None
+                #self.Peli = None
                 print("Anna numero.\n")
                 self.cls()
                 continue
