@@ -47,7 +47,8 @@ class Peli:
 
         self.valitse_sana(sanat)
 
-    def cls(self):
+    def tyhjenna_terminaali(self):
+        """ Tyhjentää terminaalin seurvaa piirtoa varten. Jos Linux niin clear muuten cls komento """
         subprocess.run(["clear" if sys.platform == "linux" else "cls"], shell=True)
 
 
@@ -58,10 +59,13 @@ class Peli:
 
     def aloitus(self):
         """ Aloitaa pelin loopin """
+
         lopeta_loop = False
+
         self.lue_sanat_tiedosto(self.SanatPolku)
+
         while True:
-            self.cls()
+            self.tyhjenna_terminaali()
 
             print(ac.logo)
 
@@ -122,6 +126,7 @@ class Peli:
 
 
     def piirra_arvaus(self):
+        """ Printaa peli ruudulle Arvaus määrän, testatut kirjaimet ja nykesen arvatun sanan. """
         print(Color.OKCYAN)
         print(f"Arvaus Määrä: {self.ArvausMaara}")
         print(Color.ENDC)
@@ -139,6 +144,7 @@ class Peli:
         print()
 
     def piirra_tikkiukko(self):
+        """ Printaa TikkuUkon käytäen self.TikkuUkot listaa"""
         index = self.IsoinArvausMäärä - self.ArvausMaara
         try:
             for rivi in self.TikkuUkot[index]:
@@ -153,7 +159,7 @@ class Peli:
 
     def piirra_voittu_ruutu(self):
         """ Printaa voittu ruudun jossa on kaikki tiedot miten peli meni """
-        self.cls()
+        self.tyhjenna_terminaali()
         print(ac.voitit_pelin)
 
         print(f"{Color.OKGREEN}Sana: {self.Sana}")
@@ -170,12 +176,12 @@ class Peli:
         try:
             kirjain = str(input("Arvaa kirjain: "))
         except KeyboardInterrupt:
-            self.cls()
+            self.tyhjenna_terminaali()
             onnistui = False
 
 
         if kirjain.lower() == "lopeta":
-            self.cls()
+            self.tyhjenna_terminaali()
             onnistui = False
         
         kirjain = kirjain.replace(" ", "")
@@ -207,7 +213,7 @@ class Peli:
         if not oliKirjain:
             havio = self.vahenna_arvaus_maaraa()
             if havio:
-                self.cls()
+                self.tyhjenna_terminaali()
                 return True
         return False
 

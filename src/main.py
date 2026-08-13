@@ -24,30 +24,29 @@ class Sovellus:
         while True:
             
             if self.Peli == None or self.Peli.Break:
-                self.cls()
+                self.tyhjenna_terminaali()
                 self.Peli = None
                 self.piirrä_alotusruutu()
 
             if self.Peli != None:
                 input("Paina Enter Jatkaaksesi")
                 self.Peli = None
-                self.cls()
+                self.tyhjenna_terminaali()
                 continue
             
             try:
                 komento = int(input("Valitse komento: "))
             except ValueError:
-                #self.Peli = None
                 print("Anna numero.\n")
-                self.cls()
+                self.tyhjenna_terminaali()
                 continue
             except KeyboardInterrupt:
-                self.cls()
+                self.tyhjenna_terminaali()
                 print("\nPeli lopetettu.")
                 break
 
             if self.suorita_komento(komento):
-                self.cls()
+                self.tyhjenna_terminaali()
                 print("\nPeli lopetettu.")
                 break
 
@@ -115,13 +114,14 @@ class Sovellus:
         tiedosto_polku += "sanat"
 
         tiedostot = []
-        for dirpath,_,filenames in os.walk(tiedosto_polku):
-            for i, f in enumerate(filenames):
-                tiedostot.append(os.path.abspath(os.path.join(dirpath, f)))
+        for sijainti, _, tiedostonimi in os.walk(tiedosto_polku):
+            for i, f in enumerate(tiedostonimi):
+                tiedostot.append(os.path.abspath(os.path.join(sijainti, f)))
                 print(f"{i}: {f}")
         return tiedostot
 
-    def cls(self):
+    def tyhjenna_terminaali(self):
+        """ Tyhjentää terminaalin seurvaa piirtoa varten """
         subprocess.run(["clear" if sys.platform == "linux" else "cls"], shell=True)
 
 
