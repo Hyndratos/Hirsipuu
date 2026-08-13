@@ -64,6 +64,7 @@ class Peli:
 
         self.lue_sanat_tiedosto(self.SanatPolku)
 
+        # Pelin looppi jossa pyydetään pelaajalta kirjainta ja tehdää kaikki tarkistukset.
         while True:
             self.tyhjenna_terminaali()
 
