@@ -53,7 +53,7 @@ class Sovellus:
 
 
     def piirrä_alotusruutu(self):
-        """ Printaa koko aloitusruudun """
+        """ Printaa aloitusruudun """
         print(Color.ENDC, end="")
         
         print(ac.logo)
@@ -78,14 +78,14 @@ class Sovellus:
                     try:
                         index = int(input("Tiedosto numero: "))
                     except ValueError:
-                        return True
+                        return False
                     except KeyboardInterrupt:
-                        return True
+                        return False
                 
                     try:
                         self.SanaTiedosto = tiedostot[index]
                     except IndexError:
-                        return True
+                        return False
 
                 self.uusi_peli(self.SanaTiedosto)
                 return False
@@ -95,14 +95,14 @@ class Sovellus:
                 try:
                     index = int(input("Tiedosto numero: "))
                 except ValueError:
-                    return True
+                    return False
                 except KeyboardInterrupt:
-                    return True
+                    return False
 
                 try:
                     self.SanaTiedosto = tiedostot[index]
                 except IndexError:
-                    return True
+                    return False
                 
             case 3:
                 return True
@@ -112,6 +112,7 @@ class Sovellus:
 
     def hae_tiedostot(self) -> list[str]:
         """ Hakee sanat txt tiedostoja ja palautaa listan niiten poluista """
+
         tiedosto_polku = os.path.realpath(__file__)
         tiedosto_polku = tiedosto_polku.rstrip("main.py")
         tiedosto_polku += "sanat"
