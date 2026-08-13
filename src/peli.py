@@ -2,7 +2,7 @@ from random import choice
 from colors import Color
 import os
 import subprocess
-import string
+import ascii as ac
 
 #######
 #     |
@@ -62,20 +62,7 @@ class Peli:
         self.lue_sanat_tiedosto(self.SanatPolku)
         while True:
             self.cls()
-            print(f"""{Color.OKBLUE}
-████████████████████████████████████████████████████████████████████
-██                                                                ██
-██                                                                ██
-██    ██╗  ██╗██╗██████╗ ███████╗██╗██████╗ ██╗   ██╗██╗   ██╗    ██
-██    ██║  ██║██║██╔══██╗██╔════╝██║██╔══██╗██║   ██║██║   ██║    ██
-██    ███████║██║██████╔╝███████╗██║██████╔╝██║   ██║██║   ██║    ██
-██    ██╔══██║██║██╔══██╗╚════██║██║██╔═══╝ ██║   ██║██║   ██║    ██
-██    ██║  ██║██║██║  ██║███████║██║██║     ╚██████╔╝╚██████╔╝    ██
-██    ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝╚═╝      ╚═════╝  ╚═════╝     ██
-██                                                                ██
-██                                                                ██
-████████████████████████████████████████████████████████████████████
-            {Color.ENDC}""")
+            print(ac.logo)
             if debug: print(self.Sana)
             print("Kirjoita Lopeta jos haluat lopettaa tai paina ctrl + c")
             print()
@@ -128,44 +115,20 @@ class Peli:
                 
             if self.sana_tarkistus():
                 self.cls()
-                print(f"""{Color.OKGREEN}
-████████████████████████████████████████████████████████████████████████████████████████████████
-██                                                                                            ██ 
-██                                                                                            ██ 
-██     ██╗   ██╗ ██████╗ ██╗████████╗██╗████████╗    ██████╗ ███████╗██╗     ██╗███╗   ██╗    ██
-██     ██║   ██║██╔═══██╗██║╚══██╔══╝██║╚══██╔══╝    ██╔══██╗██╔════╝██║     ██║████╗  ██║    ██
-██     ██║   ██║██║   ██║██║   ██║   ██║   ██║       ██████╔╝█████╗  ██║     ██║██╔██╗ ██║    ██
-██     ╚██╗ ██╔╝██║   ██║██║   ██║   ██║   ██║       ██╔═══╝ ██╔══╝  ██║     ██║██║╚██╗██║    ██
-██      ╚████╔╝ ╚██████╔╝██║   ██║   ██║   ██║       ██║     ███████╗███████╗██║██║ ╚████║    ██
-██       ╚═══╝   ╚═════╝ ╚═╝   ╚═╝   ╚═╝   ╚═╝       ╚═╝     ╚══════╝╚══════╝╚═╝╚═╝  ╚═══╝    ██
-██                                                                                            ██
-██                                                                                            ██
-████████████████████████████████████████████████████████████████████████████████████████████████
-                {Color.ENDC}""")
+
+                print(ac.voitit_pelin)
+
                 print(f"{Color.OKGREEN}Sana: {self.Sana}")
                 print(Color.ENDC, end="")
 
                 color = Color.OKGREEN if (self.IsoinArvausMäärä - self.ArvausMaara) < (self.IsoinArvausMäärä / 2) else Color.FAIL
                 print(f"{color}Väärin annettu: {self.IsoinArvausMäärä - self.ArvausMaara}")
                 print(Color.ENDC)
+
                 break
 
             if loopiBreak:
-                #print(f"{Color.FAIL}Hävisit Pelin!{Color.ENDC}")
-                print(f"""{Color.FAIL}
-██████████████████████████████████████████████████████████████████████████████████████████████████████
-██                                                                                                  ██
-██                                                                                                  ██
-██     ██╗  ██╗ █████╗ ██╗   ██╗██╗███████╗██╗████████╗    ██████╗ ███████╗██╗     ██╗███╗   ██╗    ██
-██     ██║  ██║██╔══██╗██║   ██║██║██╔════╝██║╚══██╔══╝    ██╔══██╗██╔════╝██║     ██║████╗  ██║    ██
-██     ███████║███████║██║   ██║██║███████╗██║   ██║       ██████╔╝█████╗  ██║     ██║██╔██╗ ██║    ██
-██     ██╔══██║██╔══██║╚██╗ ██╔╝██║╚════██║██║   ██║       ██╔═══╝ ██╔══╝  ██║     ██║██║╚██╗██║    ██
-██     ██║  ██║██║  ██║ ╚████╔╝ ██║███████║██║   ██║       ██║     ███████╗███████╗██║██║ ╚████║    ██
-██     ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚══════╝╚═╝   ╚═╝       ╚═╝     ╚══════╝╚══════╝╚═╝╚═╝  ╚═══╝    ██
-██                                                                                                  ██
-██                                                                                                  ██
-██████████████████████████████████████████████████████████████████████████████████████████████████████
-                {Color.ENDC}""")
+                print(ac.havisit_pelin)
                 print(f"{Color.OKGREEN}Sana oli: {self.Sana}{Color.ENDC}")
                 break
 
@@ -176,7 +139,6 @@ class Peli:
         print(Color.ENDC)
         self.piirra_testatut_kirjaimet()
         print()
-        #print("Testatut Kirjaimet: " + f"{Color.FAIL if },".join(self.AnnetutKirjaimet))
         print(" ".join(self.ArvausSana))
 
     def piirra_testatut_kirjaimet(self):
@@ -226,7 +188,6 @@ class Peli:
             havio = self.vahenna_arvaus_maaraa()
             if havio:
                 self.cls()
-                #self.piirra_tikkiukko()
                 return True
         return False
 

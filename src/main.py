@@ -1,5 +1,6 @@
 import subprocess
 from peli import Peli
+import ascii as ac
 from colors import Color
 import os
 
@@ -7,6 +8,7 @@ class Sovellus:
     """ Ohjelman pää objecti joka joka hoitaa pelin luonnin """
     def __init__(self):
         self.Peli = None
+        self.SanaTiedosto = None
 
     def uusi_peli(self, sanat: str):
         self.Peli = Peli(
@@ -16,6 +18,7 @@ class Sovellus:
         self.Peli.aloitus()
 
     def alotusruutu(self):
+        """ Pyöritää mainin loopin jossa se ottaa inputit ja tekee niilä asioita. """
         while True:
             
             if self.Peli == None or self.Peli.Break:
@@ -41,30 +44,43 @@ class Sovellus:
 
 
     def piirrä_alotusruutu(self):
+        """ Printaa koko aloitusruudun """
         print(Color.ENDC, end="")
-        print(f"""{Color.OKBLUE}
-████████████████████████████████████████████████████████████████████
-██                                                                ██
-██                                                                ██
-██    ██╗  ██╗██╗██████╗ ███████╗██╗██████╗ ██╗   ██╗██╗   ██╗    ██
-██    ██║  ██║██║██╔══██╗██╔════╝██║██╔══██╗██║   ██║██║   ██║    ██
-██    ███████║██║██████╔╝███████╗██║██████╔╝██║   ██║██║   ██║    ██
-██    ██╔══██║██║██╔══██╗╚════██║██║██╔═══╝ ██║   ██║██║   ██║    ██
-██    ██║  ██║██║██║  ██║███████║██║██║     ╚██████╔╝╚██████╔╝    ██
-██    ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝╚═╝      ╚═════╝  ╚═════╝     ██
-██                                                                ██
-██                                                                ██
-████████████████████████████████████████████████████████████████████
-        {Color.ENDC}""")
+        
+        print(ac.logo)
+
         print(f"1: {Color.OKGREEN}Alota Uusi Peli")
         print(Color.ENDC, end="")
-        print(f"2: {Color.FAIL}  Lopeta Peli")
+
+        print(f"2: {Color.OKBLUE}Valitse Sana lista")
+        print(Color.ENDC, end="")
+
+        print(f"3: {Color.FAIL}Lopeta Peli")
         print(Color.ENDC)
 
 
-    def suorita_komento(self, komento) -> bool:
+    def suorita_komento(self, komento: int) -> bool:
+        """ Suoritaa tietyn komennon riipuen siitä minkä numeron se saa ja jos retrun on True niin se sammutaa sovelluksen muutan jatkaa """
+
         match komento:
             case 1:
+                if self.SanaTiedosto == None:
+                    tiedostot = self.hae_tiedostot()
+                    try:
+                        index = int(input("Tiedosto numero: "))
+                    except ValueError:
+                        return True
+                    except KeyboardInterrupt:
+                        return True
+                
+                    try:
+                        self.SanaTiedosto = tiedostot[index]
+                    except IndexError:
+                        return True
+
+                self.uusi_peli(self.SanaTiedosto)
+                return False
+            case 2:
                 tiedostot = self.hae_tiedostot()
                 try:
                     index = int(input("Tiedosto numero: "))
@@ -72,15 +88,13 @@ class Sovellus:
                     return True
                 except KeyboardInterrupt:
                     return True
-                
+
                 try:
-                    sanat = tiedostot[index]
+                    self.SanaTiedosto = tiedostot[index]
                 except IndexError:
                     return True
-
-                self.uusi_peli(sanat)
-                return False
-            case 2:
+                
+            case 3:
                 return True
             case _:
                 print("Virheellinen komento.")
