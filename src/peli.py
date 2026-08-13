@@ -25,17 +25,29 @@ class Peli:
     ]
 
     def __init__(self, sanatPolku: str, arvausMaara: int):
+        # Valittu sana
         self.Sana = ""
+
+        # Sana johon lisätää kirjaimia arvauksissa
         self.ArvausSana = ""
+
         self.ArvausMaara = arvausMaara
         self.IsoinArvausMäärä = arvausMaara
+
+        # Sanat tiedoston polku
         self.SanatPolku = sanatPolku
+
+        # Pitää yllä kaikkia annettuja kirjaimia
         self.AnnetutKirjaimet = ""
+
+        # On True jos lopetat pelin kesken kaiken
         self.Break = False
 
     def lue_sanat_tiedosto(self, polku: str):
         """ Lukee annetun polun tiedoston sanat ja lisää ne listaan. Jonka jälkeen se suoritaa valitse sana"""
+
         sanat = []
+
         with open(polku, "r", encoding="utf-8") as tiedosto:
             for sana in tiedosto:
                 sana = sana.strip()
@@ -59,7 +71,9 @@ class Peli:
     def aloitus(self):
         """ Aloitaa pelin loopin """
         lopeta_loop = False
+
         self.lue_sanat_tiedosto(self.SanatPolku)
+
         while True:
             self.cls()
 
@@ -122,9 +136,9 @@ class Peli:
 
 
     def piirra_arvaus(self):
-        print(Color.OKCYAN)
-        print(f"Arvaus Määrä: {self.ArvausMaara}")
-        print(Color.ENDC)
+        color = Color.OKGREEN if (self.IsoinArvausMäärä - self.ArvausMaara) < (self.IsoinArvausMäärä / 2) else Color.FAIL
+        print(f"Arvaus Määrä: {color}{self.ArvausMaara}{Color.ENDC}")
+
         self.piirra_testatut_kirjaimet()
         print(" ".join(self.ArvausSana))
 
