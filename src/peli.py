@@ -58,30 +58,27 @@ class Peli:
 
     def aloitus(self):
         """ Aloitaa pelin loopin """
-        loopiBreak = False
+        lopeta_loop = False
         self.lue_sanat_tiedosto(self.SanatPolku)
         while True:
             self.cls()
+
             print(ac.logo)
+
             if debug: print(self.Sana)
+
             print("Kirjoita Lopeta jos haluat lopettaa tai paina ctrl + c")
             print()
+
             self.piirra_tikkiukko()
             self.piirra_arvaus()
 
-            try:
-                kirjain = str(input("Arvaa kirjain: "))
-            except KeyboardInterrupt:
-                self.cls()
+            kirjain, onnistui = self.pyyda_kirjainta()
+
+            if not onnistui:
                 self.Break = True
                 break
 
-
-            if kirjain.lower() == "lopeta":
-                self.cls()
-                break
-            
-            kirjain = kirjain.replace(" ", "")
             if kirjain == "":
                 continue
             
@@ -96,7 +93,7 @@ class Peli:
                         continue
 
                     if self.vahennus_tarkistus(oliKirjain):
-                        loopiBreak = True
+                        lopeta_loop = True
                         break
                     
             else:
@@ -111,25 +108,16 @@ class Peli:
                     continue
                 
                 if self.vahennus_tarkistus(oliKirjain):
-                    loopiBreak = True
+                    lopeta_loop = True
                 
             if self.sana_tarkistus():
-                self.cls()
-
-                print(ac.voitit_pelin)
-
-                print(f"{Color.OKGREEN}Sana: {self.Sana}")
-                print(Color.ENDC, end="")
-
-                color = Color.OKGREEN if (self.IsoinArvausMäärä - self.ArvausMaara) < (self.IsoinArvausMäärä / 2) else Color.FAIL
-                print(f"{color}Väärin annettu: {self.IsoinArvausMäärä - self.ArvausMaara}")
-                print(Color.ENDC)
-
+                self.piirra_voittu_ruutu()
                 break
 
-            if loopiBreak:
+            if lopeta_loop:
                 print(ac.havisit_pelin)
                 print(f"{Color.OKGREEN}Sana oli: {self.Sana}{Color.ENDC}")
+                self.piirra_testatut_kirjaimet()
                 break
 
 
@@ -138,15 +126,17 @@ class Peli:
         print(f"Arvaus Määrä: {self.ArvausMaara}")
         print(Color.ENDC)
         self.piirra_testatut_kirjaimet()
-        print()
         print(" ".join(self.ArvausSana))
 
     def piirra_testatut_kirjaimet(self):
+        """ Printaa kirjaimet jota pelaaja on testannut. väri on punanen jos väärin ja vihree jos oikein. """
+
         print("Testatut Kirjaimet: ", end="")
         for i, k in enumerate(self.AnnetutKirjaimet):
             color = Color.OKGREEN if k in self.Sana else Color.FAIL
 
             print(f"{"|" if i > 0 else ""}{color}{k}{Color.ENDC}", end="")
+        print()
 
     def piirra_tikkiukko(self):
         index = self.IsoinArvausMäärä - self.ArvausMaara
@@ -160,6 +150,36 @@ class Peli:
                 print(Color.FAIL, end="")
                 print(rivi)
                 print(Color.ENDC, end="")
+
+    def piirra_voittu_ruutu(self):
+        """ Printaa voittu ruudun jossa on kaikki tiedot miten peli meni """
+        self.cls()
+        print(ac.voitit_pelin)
+
+        print(f"{Color.OKGREEN}Sana: {self.Sana}")
+        print(Color.ENDC, end="")
+
+        color = Color.OKGREEN if (self.IsoinArvausMäärä - self.ArvausMaara) < (self.IsoinArvausMäärä / 2) else Color.FAIL
+        print(f"{color}Väärin annettu: {self.IsoinArvausMäärä - self.ArvausMaara}")
+        print(Color.ENDC)
+
+    def pyyda_kirjainta(self) -> tuple[str, bool]:
+        """ Pyytää pelaajalta kirjaimen/kirjaimet aravausta varten ja palautaa kirjemen/kirjaimet ja onnistumis boolin. """
+        onnistui = True
+        kirjain = ""
+        try:
+            kirjain = str(input("Arvaa kirjain: "))
+        except KeyboardInterrupt:
+            self.cls()
+            onnistui = False
+
+
+        if kirjain.lower() == "lopeta":
+            self.cls()
+            onnistui = False
+        
+        kirjain = kirjain.replace(" ", "")
+        return (kirjain, onnistui)
 
     def tarkista_kirjain(self, arvausKirjain: str) -> tuple[bool, bool]:
         """ Tarkistaa onko kirjain sanassa jos on niin palautaa True """
