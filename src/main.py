@@ -1,7 +1,7 @@
 import subprocess
 from peli import Peli
 import ascii as ac
-from colors import Color
+from varit import Vari
 import os
 import sys
 
@@ -53,18 +53,18 @@ class Sovellus:
 
     def piirrä_alotusruutu(self):
         """ Printaa aloitusruudun """
-        print(Color.ENDC, end="")
+        print(Vari.ENDC, end="")
         
         print(ac.logo)
 
-        print(f"1: {Color.OKGREEN}Alota Uusi Peli")
-        print(Color.ENDC, end="")
+        print(f"1: {Vari.OKGREEN}Alota Uusi Peli")
+        print(Vari.ENDC, end="")
 
-        print(f"2: {Color.OKBLUE}Valitse Sana lista")
-        print(Color.ENDC, end="")
+        print(f"2: {Vari.OKBLUE}Valitse Sana lista")
+        print(Vari.ENDC, end="")
 
-        print(f"3: {Color.FAIL}Lopeta Peli")
-        print(Color.ENDC)
+        print(f"3: {Vari.FAIL}Lopeta Peli")
+        print(Vari.ENDC)
 
 
     def suorita_komento(self, komento: int) -> bool:

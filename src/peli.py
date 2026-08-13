@@ -1,5 +1,5 @@
 from random import choice
-from colors import Color
+from varit import Vari
 import subprocess
 import ascii as ac
 import sys
@@ -10,7 +10,7 @@ import sys
 #    /|\
 #    / \
 
-debug = False
+debug = True
 
 class Peli:
     """ Hoitaa kaiken pelin logiikan. """
@@ -120,16 +120,15 @@ class Peli:
 
             if lopeta_loop:
                 print(ac.havisit_pelin)
-                print(f"{Color.OKGREEN}Sana oli: {self.Sana}{Color.ENDC}")
+                print(f"Sana oli: {Vari.OKGREEN}{self.Sana}{Vari.ENDC}")
                 self.piirra_testatut_kirjaimet()
                 break
 
 
     def piirra_arvaus(self):
         """ Printaa peli ruudulle Arvaus määrän, testatut kirjaimet ja nykesen arvatun sanan. """
-        print(Color.OKCYAN)
-        print(f"Arvaus Määrä: {self.ArvausMaara}")
-        print(Color.ENDC)
+        vari = Vari.OKGREEN if (self.IsoinArvausMäärä - self.ArvausMaara) < (self.IsoinArvausMäärä / 2) else Vari.FAIL
+        print(f"Arvaus Määrä: {vari}{self.ArvausMaara}{Vari.ENDC}")
         self.piirra_testatut_kirjaimet()
         print(" ".join(self.ArvausSana))
 
@@ -138,9 +137,9 @@ class Peli:
 
         print("Testatut Kirjaimet: ", end="")
         for i, k in enumerate(self.AnnetutKirjaimet):
-            color = Color.OKGREEN if k in self.Sana else Color.FAIL
+            vari = Vari.OKGREEN if k in self.Sana else Vari.FAIL
 
-            print(f"{"|" if i > 0 else ""}{color}{k}{Color.ENDC}", end="")
+            print(f"{"|" if i > 0 else ""}{vari}{k}{Vari.ENDC}", end="")
         print()
 
     def piirra_tikkiukko(self):
@@ -148,26 +147,24 @@ class Peli:
         index = self.IsoinArvausMäärä - self.ArvausMaara
         try:
             for rivi in self.TikkuUkot[index]:
-                print(Color.FAIL, end="")
+                print(Vari.FAIL, end="")
                 print(rivi)
-                print(Color.ENDC, end="")
+                print(Vari.ENDC, end="")
         except IndexError:
             for rivi in self.TikkuUkot[len(self.TikkuUkot) - 1]:
-                print(Color.FAIL, end="")
+                print(Vari.FAIL, end="")
                 print(rivi)
-                print(Color.ENDC, end="")
+                print(Vari.ENDC, end="")
 
     def piirra_voittu_ruutu(self):
         """ Printaa voittu ruudun jossa on kaikki tiedot miten peli meni """
         self.tyhjenna_terminaali()
         print(ac.voitit_pelin)
 
-        print(f"{Color.OKGREEN}Sana: {self.Sana}")
-        print(Color.ENDC, end="")
+        print(f"Sana: {Vari.OKGREEN}{self.Sana}{Vari.ENDC}")
 
-        color = Color.OKGREEN if (self.IsoinArvausMäärä - self.ArvausMaara) < (self.IsoinArvausMäärä / 2) else Color.FAIL
-        print(f"{color}Väärin annettu: {self.IsoinArvausMäärä - self.ArvausMaara}")
-        print(Color.ENDC)
+        vari = Vari.OKGREEN if (self.IsoinArvausMäärä - self.ArvausMaara) < (self.IsoinArvausMäärä / 2) else Vari.FAIL
+        print(f"Väärin annettu: {vari}{self.IsoinArvausMäärä - self.ArvausMaara}{Vari.ENDC}")
 
     def pyyda_kirjainta(self) -> tuple[str, bool]:
         """ Pyytää pelaajalta kirjaimen/kirjaimet aravausta varten ja palautaa kirjemen/kirjaimet ja onnistumis boolin. """
