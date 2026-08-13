@@ -89,6 +89,7 @@ class Sovellus:
 
                 self.uusi_peli(self.SanaTiedosto)
                 return False
+            
             case 2:
                 tiedostot = self.hae_tiedostot()
                 try:
