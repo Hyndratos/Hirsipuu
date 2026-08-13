@@ -69,39 +69,18 @@ class Sovellus:
 
 
     def suorita_komento(self, komento: int) -> bool:
-        """ Suoritaa tietyn komennon riipuen siitä minkä numeron se saa ja jos retrun on True niin se sammutaa sovelluksen muutan jatkaa """
+        """ Suoritaa tietyn komennon riipuen siitä minkä numeron se saa ja jos retrun on True niin se sammutaa sovelluksen muuten jatkaa """
 
         match komento:
             case 1:
                 if self.SanaTiedosto == None:
-                    tiedostot = self.hae_tiedostot()
-                    try:
-                        index = int(input("Tiedosto numero: "))
-                    except ValueError:
-                        return False
-                    except KeyboardInterrupt:
+                    if self.valitse_tiedosto():
                         return False
                 
-                    try:
-                        self.SanaTiedosto = tiedostot[index]
-                    except IndexError:
-                        return False
-
                 self.uusi_peli(self.SanaTiedosto)
                 return False
-            
             case 2:
-                tiedostot = self.hae_tiedostot()
-                try:
-                    index = int(input("Tiedosto numero: "))
-                except ValueError:
-                    return False
-                except KeyboardInterrupt:
-                    return False
-
-                try:
-                    self.SanaTiedosto = tiedostot[index]
-                except IndexError:
+                if self.valitse_tiedosto():
                     return False
                 
             case 3:
@@ -109,6 +88,24 @@ class Sovellus:
             case _:
                 print("Virheellinen komento.")
                 return False
+
+    def valitse_tiedosto(self) -> bool:
+        """ Valitsee sana tiedoston ja palautaa True jos ei onnistunut muuten False """
+
+        tiedostot = self.hae_tiedostot()
+        try:
+            index = int(input("Tiedosto numero: "))
+        except ValueError:
+            return True
+        except KeyboardInterrupt:
+            return True
+
+        try:
+            self.SanaTiedosto = tiedostot[index]
+        except IndexError:
+            return True
+        
+        return False
 
     def hae_tiedostot(self) -> list[str]:
         """ Hakee sanat txt tiedostoja ja palautaa listan niiten poluista """
