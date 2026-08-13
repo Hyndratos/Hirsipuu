@@ -44,3 +44,7 @@ voitit_pelin = f"""{Color.OKGREEN}
 ██                                                                                            ██
 ████████████████████████████████████████████████████████████████████████████████████████████████
                 {Color.ENDC}"""
+
+if __name__ == "__main__":
+    print("Pyöritä main.py")
+    input("Paina Enter")

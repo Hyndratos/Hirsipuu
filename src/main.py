@@ -12,6 +12,7 @@ class Sovellus:
         self.SanaTiedosto = None
 
     def uusi_peli(self, sanat: str):
+        """ Luo uuden pelin ja aloitaa sen. """
         self.Peli = Peli(
             sanatPolku=sanat, 
             arvausMaara=6
@@ -24,6 +25,7 @@ class Sovellus:
             
             if self.Peli == None or self.Peli.Break:
                 self.cls()
+                self.Peli = None
                 self.piirrä_alotusruutu()
 
             if self.Peli != None:
