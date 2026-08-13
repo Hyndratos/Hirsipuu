@@ -187,10 +187,17 @@ class Peli:
             print(f"{"|" if i > 0 else ""}{color}{k}{Color.ENDC}", end="")
 
     def piirra_tikkiukko(self):
-        for rivi in self.TikkuUkot[self.IsoinArvausMäärä - self.ArvausMaara]:
-            print(Color.FAIL, end="")
-            print(rivi)
-            print(Color.ENDC, end="")
+        index = self.IsoinArvausMäärä - self.ArvausMaara
+        try:
+            for rivi in self.TikkuUkot[index]:
+                print(Color.FAIL, end="")
+                print(rivi)
+                print(Color.ENDC, end="")
+        except IndexError:
+            for rivi in self.TikkuUkot[len(self.TikkuUkot) - 1]:
+                print(Color.FAIL, end="")
+                print(rivi)
+                print(Color.ENDC, end="")
 
     def tarkista_kirjain(self, arvausKirjain: str) -> tuple[bool, bool]:
         """ Tarkistaa onko kirjain sanassa jos on niin palautaa True """
@@ -214,15 +221,16 @@ class Peli:
         return False
 
     def vahennus_tarkistus(self, oliKirjain: bool) -> bool:
+        """ Suoritaa vahenna_arvaus_maaraa ja clearaa terminaalin. return True jos hävisit """
         if not oliKirjain:
-            havio = self.vahenna_aravuas_maaraa()
+            havio = self.vahenna_arvaus_maaraa()
             if havio:
                 self.cls()
                 #self.piirra_tikkiukko()
                 return True
         return False
 
-    def vahenna_aravuas_maaraa(self) -> bool:
+    def vahenna_arvaus_maaraa(self) -> bool:
         """ Vähentää Arvaus määrää ja jos se menee 0 niin palauttaa True """
 
         self.ArvausMaara -= 1
@@ -241,4 +249,4 @@ class Peli:
         return True
 
 if __name__ == "__main__":
-    print("Ei tee mitään")
+    print("Pyöritä main.py")
