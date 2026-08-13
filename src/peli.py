@@ -25,12 +25,23 @@ class Peli:
     ]
 
     def __init__(self, sanatPolku: str, arvausMaara: int):
+        # Randomisti valittu sana
         self.Sana = ""
+
+        # Sanan jonka pelaaja näkee johon listään oiken arvatut kirjaimet
         self.ArvausSana = ""
+
+        # Elämä määrä eli kuinka monta yritystä on jäljellä
         self.ArvausMaara = arvausMaara
         self.IsoinArvausMäärä = arvausMaara
+
+        # Polku teksti tiedostolle jossa on kaikki sanat
         self.SanatPolku = sanatPolku
+
+        # Kaikki Annetut Kirjaimet pelaajalta
         self.AnnetutKirjaimet = ""
+
+        # main tarvitsee tätä tarkistuksiin.
         self.Break = False
 
     def lue_sanat_tiedosto(self, polku: str):
